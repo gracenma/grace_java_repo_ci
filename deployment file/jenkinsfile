@@ -1,0 +1,37 @@
+node {
+ stage ('grace_checkout')  {
+
+     build job: 'grace_checkout' 
+ }
+stage ('grace_build_job') {
+     build job: 'grace_build_job' 
+    }
+stage ('codequality') {
+      build job: 'codequality' 
+        }
+        
+stage('Archive_Artifact') {
+build job: 'Archive_Artifact'
+}
+ stage('Publish_ToArtifactory') {
+build job: 'Publish_ToArtifactory'
+}
+stage (''DEV Approve')
+      {
+            echo "Taking approval from DEV"
+               
+            timeout(time: 7, unit: 'DAYS') {
+            input message: 'Do you want to deploy?', submitter: 'admin'
+            }
+     }
+stage ('Deploy_ToContainer')
+         {
+             build job: 'Deploy_ToContainer'
+          }
+
+stage ('Slack-Notification') {
+     
+build job: 'Slack-Notification'
+    }
+  
+}  
